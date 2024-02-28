@@ -33,5 +33,5 @@ button {
 
 button[type="submit"],
 .submit {
-  @apply bg-primary text-white border-0;
+  @apply bg-primary text-white border-primary;
 }
