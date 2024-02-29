@@ -81,7 +81,7 @@ export default function Register() {
       </button>
 
       <div className="text-center my-4 text-sm text-gray-800">
-        Existing account? <Link href={"/login"} className="underline italic">Login &raquo;</Link>
+        Existing account? <Link href={"/login"} className="underline italic">Login here &raquo;</Link>
       </div>
     </section>
   );
