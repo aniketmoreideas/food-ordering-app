@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -75,13 +76,20 @@ export default function Register() {
       <p className="text-center text-gray-500 py-3 text-sm italic">
         or login with Google
       </p>
-      <button className="flex justify-center gap-2 items-center">
+      <button
+        onClick={() => signIn("google", { callbackUrl: "/" })}
+        type="button"
+        className="flex justify-center gap-2 items-center"
+      >
         <Image src={"/google.png"} alt="google" height={"16"} width={"16"} />
         Login with Google
       </button>
 
       <div className="text-center my-4 text-sm text-gray-800">
-        Existing account? <Link href={"/login"} className="underline italic">Login here &raquo;</Link>
+        Existing account?{" "}
+        <Link href={"/login"} className="underline italic">
+          Login here &raquo;
+        </Link>
       </div>
     </section>
   );

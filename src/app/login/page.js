@@ -9,7 +9,7 @@ export default function LoginPage() {
 
   async function handleFormSubmt(ev) {
     ev.preventDefault();
-    await signIn("credentials", { email, password });
+    await signIn("credentials", { email, password }, { callbackUrl: "/" });
   }
 
   return (
@@ -37,7 +37,11 @@ export default function LoginPage() {
       <p className="text-center text-gray-500 py-3 text-sm italic">
         or login with Google
       </p>
-      <button className="flex justify-center gap-2 items-center">
+      <button
+        onClick={() => signIn("google", { callbackUrl: "/" })}
+        type="button"
+        className="flex justify-center gap-2 items-center"
+      >
         <Image src={"/google.png"} alt="google" height={"16"} width={"16"} />
         Login with Google
       </button>
