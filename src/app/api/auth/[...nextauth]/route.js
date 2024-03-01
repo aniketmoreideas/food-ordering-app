@@ -8,7 +8,7 @@ import clientPromise from "@/libs/mongoConnect";
 
 const bcrypt = require("bcryptjs");
 
-const handler = NextAuth({
+export const authOptions = {
   secret: process.env.SECRET,
   adapter: MongoDBAdapter(clientPromise),
   providers: [
@@ -34,7 +34,7 @@ const handler = NextAuth({
 
         mongoose.connect(process.env.MONGO_URL);
         const user = await User.findOne({ email });
-        // console.log(user.password);
+        // console.log(user);
         const passwordOk = user && bcrypt.compareSync(password, user.password);
 
         // console.log(passwordOk);
@@ -47,6 +47,8 @@ const handler = NextAuth({
       },
     }),
   ],
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

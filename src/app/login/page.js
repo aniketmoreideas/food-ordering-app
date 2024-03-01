@@ -9,7 +9,7 @@ export default function LoginPage() {
 
   async function handleFormSubmt(ev) {
     ev.preventDefault();
-    await signIn("credentials", { email, password }, { callbackUrl: "/" });
+    await signIn("credentials", { email, password });
   }
 
   return (

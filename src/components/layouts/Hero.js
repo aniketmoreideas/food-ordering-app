@@ -31,7 +31,7 @@ export default function Hero() {
           layout={"fill"}
           objectFit={"contain"}
           alt={"pizza"}
-          className="spinning-image"
+          className="spinning-image -z-10"
         />
       </div>
     </section>
