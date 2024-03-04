@@ -35,6 +35,20 @@ export default function ProfilePage() {
     });
   }
 
+  const handleFileChange = async (ev) => {
+    // console.log(ev);
+    const files = ev.target.files;
+    if (files?.length == 1) {
+      const data = new FormData();
+      data.set("file", files[0]);
+      console.log(data);
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: data,
+      });
+    }
+  };
+
   return (
     <section className="my-8 max-w-sm mx-auto">
       <h1 className="text-center text-primary text-3xl font-semibold">
@@ -48,10 +62,19 @@ export default function ProfilePage() {
               width={200}
               height={200}
               className="w-full h-full rounded-lg"
+              alt="profile image"
             />
-            <button type="button" className="mt-2">
-              Edit
-            </button>
+            <label>
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+                accept=".jpg, .jpeg, .png"
+              />
+              <span className="p-2 rounded-lg border border-gray-400 text-sm text-center block mt-1 cursor-pointer">
+                Edit
+              </span>
+            </label>
           </div>
         </div>
         <div className="grow">
