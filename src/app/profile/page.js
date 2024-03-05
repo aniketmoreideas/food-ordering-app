@@ -7,12 +7,14 @@ import { useEffect, useState } from "react";
 export default function ProfilePage() {
   const session = useSession();
   const [userName, setUserName] = useState("");
+  const [userImage, setUserImage] = useState("");
 
   const { status } = session;
 
   useEffect(() => {
     if (status === "authenticated") {
       setUserName(session.data.user.name);
+      setUserImage(session.data.user.image);
     }
   }, [session, status]);
 
@@ -23,15 +25,13 @@ export default function ProfilePage() {
     return redirect("/login");
   }
 
-  const userImage = session.data.user.image;
-
   async function handleProfileInfoUpdate(ev) {
     ev.preventDefault();
     // console.log(ev);
     const response = await fetch("/api/profile", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: userName }),
+      body: JSON.stringify({ name: userName, image: userImage }),
     });
   }
 
@@ -41,11 +41,16 @@ export default function ProfilePage() {
     if (files?.length == 1) {
       const data = new FormData();
       data.set("file", files[0]);
-      console.log(data);
+      // console.log(data);
       const response = await fetch("/api/upload", {
         method: "POST",
         body: data,
       });
+
+      if (response.ok) {
+        const res = await response.json();
+        setUserImage(res);
+      }
     }
   };
 
@@ -55,15 +60,17 @@ export default function ProfilePage() {
         Profile
       </h1>
       <div className="flex gap-4 my-4 items-center">
-        <div>
+        <div className="max-w-[120px]">
           <div>
-            <Image
-              src={userImage}
-              width={200}
-              height={200}
-              className="w-full h-full rounded-lg"
-              alt="profile image"
-            />
+            {userImage && (
+              <Image
+                src={userImage}
+                width={200}
+                height={200}
+                className="w-full h-full rounded-lg"
+                alt="profile image"
+              />
+            )}
             <label>
               <input
                 type="file"
