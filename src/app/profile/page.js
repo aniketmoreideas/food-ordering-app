@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const session = useSession();
+  // console.log(session);
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -23,6 +24,7 @@ export default function ProfilePage() {
       setUserImage(session.data.user.image);
       fetch("api/profile").then((response) => {
         response.json().then((data) => {
+          console.log(data);
           setCity(data.city);
           setCountry(data.country);
           setStreetAddress(data.streetAddress);
