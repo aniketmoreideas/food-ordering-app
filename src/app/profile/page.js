@@ -3,11 +3,17 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const session = useSession();
   const [userName, setUserName] = useState("");
   const [userImage, setUserImage] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
 
   const { status } = session;
 
@@ -15,6 +21,15 @@ export default function ProfilePage() {
     if (status === "authenticated") {
       setUserName(session.data.user.name);
       setUserImage(session.data.user.image);
+      fetch("api/profile").then((response) => {
+        response.json().then((data) => {
+          setCity(data.city);
+          setCountry(data.country);
+          setStreetAddress(data.streetAddress);
+          setPhoneNumber(data.phoneNumber);
+          setPostalCode(data.postalCode);
+        });
+      });
     }
   }, [session, status]);
 
@@ -31,26 +46,44 @@ export default function ProfilePage() {
     const response = await fetch("/api/profile", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: userName, image: userImage }),
+      body: JSON.stringify({
+        name: userName,
+        image: userImage,
+        phoneNumber,
+        streetAddress,
+        postalCode,
+        city,
+        country,
+      }),
     });
+    if (response.ok) {
+      toast.success("Saved...");
+    }
   }
 
   const handleFileChange = async (ev) => {
-    // console.log(ev);
     const files = ev.target.files;
     if (files?.length == 1) {
       const data = new FormData();
       data.set("file", files[0]);
-      // console.log(data);
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: data,
-      });
-
-      if (response.ok) {
-        const res = await response.json();
-        setUserImage(res);
-      }
+      await toast.promise(
+        fetch("api/upload", {
+          method: "POST",
+          body: data,
+        }).then((response) => {
+          if (response.ok) {
+            return response.json().then((res) => {
+              setUserImage(res);
+            });
+          }
+          throw new Error("Something went wrong");
+        }),
+        {
+          loading: "Uploading...",
+          success: "Upload Complete",
+          error: "Error!",
+        }
+      );
     }
   };
 
@@ -59,9 +92,9 @@ export default function ProfilePage() {
       <h1 className="text-center text-primary text-3xl font-semibold">
         Profile
       </h1>
-      <div className="flex gap-4 my-4 items-center">
-        <div className="max-w-[120px]">
-          <div>
+      <div className="flex gap-4 my-4 ">
+        <div>
+          <div className="max-w-[120px] mt-3">
             {userImage && (
               <Image
                 src={userImage}
@@ -85,7 +118,7 @@ export default function ProfilePage() {
           </div>
         </div>
         <div className="grow">
-          <form onSubmit={handleProfileInfoUpdate}>
+          <form id="profileForm" onSubmit={handleProfileInfoUpdate}>
             <input
               type="text"
               name="name"
@@ -99,6 +132,36 @@ export default function ProfilePage() {
               value={session?.data?.user?.email}
               disabled={true}
               className="text-gray-500"
+            />
+            <input
+              type="tel"
+              value={phoneNumber}
+              onChange={(ev) => setPhoneNumber(ev.target.value)}
+              placeholder="Phone Number"
+            />
+            <input
+              type="text"
+              value={streetAddress}
+              onChange={(ev) => setStreetAddress(ev.target.value)}
+              placeholder="Street Address"
+            />
+            <input
+              type="text"
+              value={postalCode}
+              onChange={(ev) => setPostalCode(ev.target.value)}
+              placeholder="Postal Code"
+            />
+            <input
+              type="text"
+              value={city}
+              onChange={(ev) => setCity(ev.target.value)}
+              placeholder="City"
+            />
+            <input
+              type="text"
+              value={country}
+              onChange={(ev) => setCountry(ev.target.value)}
+              placeholder="Country"
             />
             <button type="submit">Save</button>
           </form>
