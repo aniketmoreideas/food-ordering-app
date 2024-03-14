@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { User } from "@/models/User";
 
-const bcrypt = require("bcryptjs");
-export async function POST(req) {
+import bcrypt from "bcryptjs";
+export async function POST(req: { json: () => any; }) {
   mongoose.connect(process.env.MONGO_URL);
   const body = await req.json();
 
