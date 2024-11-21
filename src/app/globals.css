@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+section.hero {
+  @apply grid;
+  grid-template-columns: 0.4fr 0.6fr;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning-image {
+  animation: spin 150s linear infinite;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="tel"],
+input[type="password"] {
+  @apply block border rounded-xl bg-gray-100 my-3 border-gray-300 px-3 py-2 w-full;
+  @apply text-sm;
+}
+
+button {
+  @apply block w-full border border-gray-400 text-gray-700 rounded-xl bg-gray-100 font-semibold p-1;
+}
+
+button[type="submit"],
+.submit {
+  @apply bg-primary text-white border-primary;
+}
+
+input[type="email"]:disabled,
+input[type="text"]:disabled,
+input[type="tel"]:disabled,
+input[type="password"]:disabled {
+  @apply cursor-not-allowed bg-gray-300;
+}
+
+button[type="submit"]:disabled,
+.submit:disabled {
+  @apply cursor-not-allowed 
+}
