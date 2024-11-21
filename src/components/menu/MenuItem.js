@@ -1,6 +1,6 @@
 export default function MenuItem() {
   return (
-    <div className="text-center p-3 pb-5 rounded-2xl bg-gray-100 hover:bg-gray-200 transition-all hover:shadow-xl">
+    <div className="text-center p-3 pb-5 rounded-2xl bg-gray-100 hover:bg-gray-150 transition-all hover:shadow-xl">
       <div className="text-center">
         <img src="./pizza.png" alt="pizza" className="max-h-44 block mx-auto" />
       </div>
@@ -9,7 +9,7 @@ export default function MenuItem() {
         Lorem ipsum dolor sit amet, consectetur adipisicing elit...
       </p>
       <button className="bg-primary px-6 rounded-full text-white py-2">
-        Add to cart AED 30
+        Add to Cart AED 30
       </button>
     </div>
   );
